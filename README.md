@@ -92,3 +92,20 @@ La démo envoie 12 messages fictifs. Relancer la démo ne crée pas de doublons.
 ```
 
 Le détail des vérifications se trouve dans [docs/validation.md](docs/validation.md).
+
+## Partie 3 : Traitement par lots (Batch Processing) et Optimisations
+
+Le script `src/batch.py` permet d'analyser les données historiques enregistrées dans la table PostgreSQL `toots` en s'appuyant sur les Structured APIs de Spark.
+
+### Fonctionnalités réalisées :
+- **Chargement et Caching :** Chargement des données depuis PostgreSQL via JDBC et mise en cache (`cache()`) pour optimiser les performances lors d'actions multiples.
+- **Transformations et Agrégations :**
+  - Filtrage par activité utilisateur.
+  - Analyse et éclatement des hashtags les plus fréquents.
+  - Calcul des métriques journalières (total de toots, longueur moyenne, favoris).
+- **Optimisations de performance (Tuning) :** Application de `.coalesce(1)` lors de l'écriture pour éviter la prolifération de micro-fichiers, conformément aux bonnes pratiques du moteur Catalyst.
+
+### Exécution du traitement Batch :
+Pour lancer le script batch directement dans l'environnement conteneurisé du projet :
+```bash
+docker compose exec spark /opt/spark/bin/spark-submit --master local[2] --conf spark.jars.ivy=/tmp/ivy --packages org.postgresql:postgresql:42.6.0 /app/src/batch.py
