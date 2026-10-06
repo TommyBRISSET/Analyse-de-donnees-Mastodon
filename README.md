@@ -153,7 +153,8 @@ Les résultats sont exploités visuellement dans le même environnement Jupyter,
 2. **Fréquence des publications :** Courbe temporelle affichant le nombre de toots ingérés par minute.
 3. **Top 10 des Hashtags :** Diagramme en barres horizontal classant les hashtags les plus populaires de l'échantillon.
 4. **Heatmap d'activité utilisateur :** Matrice thermique mettant en évidence les heures d'activité des utilisateurs les plus prolifiques.
-
+5. **Social listening :** Courbe temporelle croisant le volume d'ingestion avec les prédictions du modèle de Machine Learning par minute. 
+6. **Analyse comportementale :** Graphique en violon (*Violin Plot*) combinant boîte à moustaches et densité de probabilité pour analyser la distribution statistique du nombre de caractères selon la polarité du message.
 - **Chargement et Caching :** Chargement des données depuis PostgreSQL via JDBC et mise en cache (`cache()`) pour optimiser les performances lors d'actions multiples.
 - **Transformations et Agrégations :**
   - Filtrage par activité utilisateur.
