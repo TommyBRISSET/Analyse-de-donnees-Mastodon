@@ -6,6 +6,8 @@ Projet réalisé avec les notions du cours : DataFrames, transformations, micro-
 
 - **Partie 1** : récupérer les publications publiques par hashtag et les envoyer dans Kafka.
 - **Partie 2** : nettoyer et filtrer les publications, compter les toots par minute et calculer leur longueur moyenne par utilisateur.
+- **Partie 3** : traitement batch, agrégations avancées et optimisation.
+- **Partie 4** : analyse de sentiments avec Spark MLlib sur l'historique de données.
 
 ## Configuration
 
@@ -91,8 +93,6 @@ La démo envoie 12 messages fictifs. Relancer la démo ne crée pas de doublons.
  docker compose --profile live --profile demo down
 ```
 
-Le détail des vérifications se trouve dans [docs/validation.md](docs/validation.md).
-
 ## Partie 3 : Traitement par lots (Batch Processing) et Optimisations
 
 Le script `src/batch.py` permet d'analyser les données historiques enregistrées dans la table PostgreSQL `toots` en s'appuyant sur les Structured APIs de Spark.
@@ -109,3 +109,35 @@ Le script `src/batch.py` permet d'analyser les données historiques enregistrée
 Pour lancer le script batch directement dans l'environnement conteneurisé du projet :
 ```bash
 docker compose exec spark /opt/spark/bin/spark-submit --master local[2] --conf spark.jars.ivy=/tmp/ivy --packages org.postgresql:postgresql:42.6.0 /app/src/batch.py
+```
+
+## Environnement JupyterLab (Parties 4 & 5)
+
+Pour les étapes d'analyse de machine learning et de data visualisation, un conteneur JupyterLab est intégré à l'environnement.
+
+Démarrage de l'environnement Jupyter :
+```bash
+docker compose up -d jupyter
+```
+
+L'interface est accessible sur **http://localhost:8888**.
+
+## Partie 4 : Analyse de sentiments avec Spark MLlib
+L'analyse de sentiments est réalisée dans le notebook etape4_sentiment_analysis.ipynb à l'aide de l'API Spark MLlib.
+
+Fonctionnalités réalisées :
+Prérequis : Nécessite le dataset Kaggle Sentiment140 (`training.1600000.processed.noemoticon.csv`) placé à la racine du projet.
+
+**Pipeline de Machine Learning :**
+
+1. `Tokenizer` : Découpage du texte en mots.
+
+2. `StopWordsRemover` : Suppression des mots de liaison.
+
+3. `CountVectorizer et IDF` : Vectorisation des mots avec pondération TF-IDF.
+
+4. `LogisticRegression` : Modèle de classification binaire (Positif/Négatif).
+
+Inférence : Le modèle entraîné sur le dataset Kaggle est appliqué sur l'historique des toots stockés dans PostgreSQL.
+
+Stockage : Les prédictions sont sauvegardées dans une nouvelle table PostgreSQL nommée `toots_sentiments` pour une exploitation ultérieure en Data Visualisation.
