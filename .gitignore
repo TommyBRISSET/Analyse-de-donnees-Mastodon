@@ -1,5 +1,26 @@
+# Environnement et secrets
 .env
-__pycache__/
-*.pyc
+
+# Environnements virtuels Python
 .venv/
+venv/
+ENV/
+env/
+
+# Cache Python et compilation
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cache de tests
 .pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Fichiers de données volumineux / datasets locaux
+*.csv
+
+# IDEs
+.idea/
+.vscode/
