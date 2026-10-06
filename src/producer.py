@@ -1,4 +1,3 @@
-"""Partie 1 : événements publics Mastodon -> messages JSON Kafka."""
 import argparse
 import json
 import logging

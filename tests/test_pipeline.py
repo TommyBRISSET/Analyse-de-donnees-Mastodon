@@ -1,4 +1,3 @@
-"""Tests réels Spark/PostgreSQL, dans un schéma SQL isolé puis supprimé."""
 import os
 import unittest
 from unittest.mock import patch

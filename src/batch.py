@@ -1,4 +1,3 @@
-"""Partie 3 : Batch processing sur les données historiques stockées dans PostgreSQL."""
 import os
 from pyspark.sql import SparkSession, functions as F
 
@@ -27,24 +26,22 @@ def run_batch():
     df = spark.read.jdbc(url=jdbc_url, table="toots", properties=connection_properties)
     df.show(5, truncate=False)
 
-    # Optimisation (Cours Jour 3) : Caching du DataFrame car plusieurs actions vont suivre
     df.cache()
 
-    print("--- 2. Tâche Batch : Filtrage par activité utilisateur (ex: utilisateurs avec plus de X toots) ---")
+    print("--- 2. Tâche batch : Filtrage par activité utilisateur ---")
     user_activity = df.groupBy("username") \
         .agg(F.count("*").alias("total_toots")) \
         .filter(F.col("total_toots") > 1)
     user_activity.show()
 
-    print("--- 3. Tâche Batch : Analyse des hashtags les plus fréquents ---")
-    # Comme la colonne 'hashtags' est un tableau (array<string>), on peut utiliser explode()
+    print("--- 3. Tâche batch : Analyse des hashtags les plus fréquents ---")
     exploded_tags = df.withColumn("tag", F.explode("hashtags"))
     top_tags = exploded_tags.groupBy("tag") \
         .agg(F.count("*").alias("tag_count")) \
         .orderBy(F.col("tag_count").desc())
     top_tags.show(10)
 
-    print("--- 4. Tâche Batch : Métriques globales journalières (Total toots & longueur moyenne) ---")
+    print("--- 4. Tâche batch : Métriques globales journalières ---")
     daily_metrics = df.withColumn("date", F.to_date(F.col("created_at"))) \
         .groupBy("date") \
         .agg(
@@ -55,13 +52,12 @@ def run_batch():
         .orderBy("date")
     daily_metrics.show()
 
-    print("--- 5. Optimisation & Écriture (Repartition / Coalesce - Cours Jour 3) ---")
-    # Utilisation de coalesce(1) pour l'écriture afin d'éviter la prolifération de micro-fichiers
+    print("--- 5. Optimisation & écriture ---")
     daily_metrics.coalesce(1).write \
         .mode("overwrite") \
         .jdbc(url=jdbc_url, table="batch_daily_metrics", properties=connection_properties)
 
-    print("Traitement Batch (Partie 3) terminé avec succès !")
+    print("Traitement batch (Partie 3) terminé avec succès !")
     spark.stop()
 
 

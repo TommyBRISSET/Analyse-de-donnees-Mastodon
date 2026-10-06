@@ -1,4 +1,3 @@
-"""Partie 2 : readStream, schéma explicite, transformations et foreachBatch."""
 import logging
 import os
 
@@ -33,8 +32,6 @@ def transform(raw):
 
 
 def save_batch(batch, batch_id):
-    # Le micro-batch est borné par maxOffsetsPerTrigger. La base constitue
-    # l'état durable : seuls les nouveaux IDs contribuent aux agrégats Spark.
     rows = batch.dropDuplicates(['instance', 'id']).collect()
     if not rows:
         return

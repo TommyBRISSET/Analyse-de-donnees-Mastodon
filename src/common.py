@@ -1,4 +1,3 @@
-"""Contrat JSON commun au producteur et au consommateur."""
 import os
 import re
 from html.parser import HTMLParser

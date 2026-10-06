@@ -1,4 +1,3 @@
-"""Adaptation des événements SSE de maintien de connexion."""
 from mastodon import StreamListener
 
 
