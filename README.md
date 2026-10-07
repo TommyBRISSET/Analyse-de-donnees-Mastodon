@@ -1,7 +1,5 @@
 # 5SPAR — Analyse de données Mastodon
 
-Projet réalisé avec les notions du cours : DataFrames, transformations, micro-batchs et checkpoints.
-
 **Mastodon → Kafka → Spark Structured Streaming → PostgreSQL**
 
 - **Partie 1** : récupérer les publications publiques par hashtag et les envoyer dans Kafka.
@@ -124,7 +122,7 @@ L'interface JupyterLab est accessible sur **http://localhost:8888** une fois le 
 
 L'analyse de sentiments est réalisée dans le notebook `part4_5.ipynb` à l'aide de l'API Spark MLlib.
 
-** Prérequis important : Téléchargement du Dataset Kaggle**
+**Prérequis important : Téléchargement du Dataset Kaggle**
 Le jeu de données d'entraînement étant trop volumineux pour être inclus dans ce dépôt, vous devez le récupérer manuellement :
 
 1. Rendez-vous sur Kaggle : [Sentiment140 dataset](https://www.kaggle.com/datasets/kazanova/sentiment140)
@@ -155,12 +153,6 @@ Les résultats sont exploités visuellement dans le même environnement Jupyter,
 4. **Heatmap d'activité utilisateur :** Matrice thermique mettant en évidence les heures d'activité des utilisateurs les plus prolifiques.
 5. **Social listening :** Courbe temporelle croisant le volume d'ingestion avec les prédictions du modèle de Machine Learning par minute. 
 6. **Analyse comportementale :** Graphique en violon (*Violin Plot*) combinant boîte à moustaches et densité de probabilité pour analyser la distribution statistique du nombre de caractères selon la polarité du message.
-- **Chargement et Caching :** Chargement des données depuis PostgreSQL via JDBC et mise en cache (`cache()`) pour optimiser les performances lors d'actions multiples.
-- **Transformations et Agrégations :**
-  - Filtrage par activité utilisateur.
-  - Analyse et éclatement des hashtags les plus fréquents.
-  - Calcul des métriques journalières (total de toots, longueur moyenne, favoris).
-- **Optimisations de performance (Tuning) :** Application de `.coalesce(1)` lors de l'écriture pour éviter la prolifération de micro-fichiers, conformément aux bonnes pratiques du moteur Catalyst.
 
 ## Contributeurs
 
